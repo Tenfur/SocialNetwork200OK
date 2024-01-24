@@ -1,48 +1,44 @@
-import {Sequelize} from 'sequelize';
+import { Sequelize } from 'sequelize';
 
-class Database {
-    constructor() {
-        this._sequelize = new Sequelize({
-            dialect: "mssql",
-            dialectOptions: {
-                options: {
-                    encrypt: true // for Azure
-                }
-            },
-            host: process.env.MSSQL_SERVER,
-            database: process.env.MSSQL_DATABASE,
-            username: process.env.MSSQL_USERNAME,
-            password: process.env.MSSQL_PASSWORD
+const create_connection = () => {
+    const conn = new Sequelize({
+        dialect: "mssql",
+        dialectOptions: {
+            options: {
+                encrypt: true // for Azure
+            }
+        },
+        host: process.env.MSSQL_SERVER,
+        database: process.env.MSSQL_DATABASE,
+        username: process.env.MSSQL_USERNAME,
+        password: process.env.MSSQL_PASSWORD
+    })
+    conn.authenticate()
+        .then(()=> {
+            console.info('Database connected successfully')
+        })
+        .catch((e)=> {
+            console.error(`Error to connect database: ${e}`)
         })
 
-        this.connect()
-    }
+    return conn
+}
 
-    get sequelize() {
-        return this._sequelize
-    }
 
-    async connect() {
-        try {
-            await this._sequelize.authenticate()
-            console.log('Connection has been established successfully')
-        }catch (e){
-            console.error(`Error to conect to database: ${e}`)
-        }
-    }
-
-    sync_database() {
-        // call this methods after we have defined all models
-        // use this when you want to create tables but it will replace the existing ones: ({force: true})
-        try {
-            this._sequelize.sync()
-                .then(() => {
-                    console.log('Database syncronized successfully')
-                })
-        }catch (e){
-            console.error(`Error to sync database: ${e}`)
-        }
+const sync_database = async (conn) => {
+    try {
+        await conn.sync()
+            .then(()=>{
+                console.info('Database syncronized successfully')
+            })
+    } catch(e) {
+        console.error(`Error to sync database: ${e}`)
     }
 }
 
-export default Database
+const connect_database = async () => {
+    const conn = await create_connection();
+    await sync_database(conn);
+}
+
+export {create_connection, connect_database}

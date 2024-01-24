@@ -1,10 +1,12 @@
+import User from "../models/UserModel.js"
+
 class UserRepository {
-    constructor(model) {
-        this._model = model
+    constructor() {
     }
 
     async create_user(user) {
-        return await this._model.create(user)
+        console.log('ola3')
+        return await User().create(user)
     }
 }
 
