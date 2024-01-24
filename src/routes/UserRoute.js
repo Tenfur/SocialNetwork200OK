@@ -1,23 +1,29 @@
 import {Router} from "express"
-import users from "../data/Users.js"
 
-const router = Router()
+class UserRoutes {
+    constructor(service) {
+        this._service = service;
+        this._router = Router();
+        this.initialize_routes();
+    }
 
-router.get("/users", (req, res) => {
-    res.json(users)
-})
+    get router() {
+        return this._router;
+    }
 
-router.get("/users/:id", (req, res) => {
-    console.log("Params:", req.params)
-})
+    initialize_routes() {
+        this._router.post('/users', this.create_user.bind(this));
+    }
 
-router.post("/users", (req, res) => {
-    console.log("BODY:", req.body)
-    return res.json({
-        "message": "Correct!",
-        "data": req.body
-    })
-})
-// express-validator
+    async create_user(req, res) {
+        try {
+            const {nombres, apellidos} = req.body;
+            const user = await this._service.create_user({nombres, apellidos});
+            return res.json(user)
+        }catch (e){
+            res.status(500).send(`Error to create user: ${e}`);
+        }
+    }
+}
 
-export default router
+export default UserRoutes
