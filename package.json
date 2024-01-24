@@ -1,0 +1,20 @@
+{
+  "name": "socialnetwork",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "First Project 200 ok",
+  "main": "index.js",
+  "scripts": {
+    "start": "node ./src/main.js",
+    "dev": "nodemon ./src/main.js"
+  },
+  "author": "Paolo, Arian",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.4.0",
+    "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.3"
+  }
+}
