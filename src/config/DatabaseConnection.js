@@ -12,14 +12,15 @@ const create_connection = () => {
         database: process.env.MSSQL_DATABASE,
         username: process.env.MSSQL_USERNAME,
         password: process.env.MSSQL_PASSWORD
-    })
+    });
+
     conn.authenticate()
         .then(()=> {
             console.info('Database connected successfully')
         })
         .catch((e)=> {
             console.error(`Error to connect database: ${e}`)
-        })
+        });
 
     return conn
 }
@@ -36,9 +37,7 @@ const sync_database = async (conn) => {
     }
 }
 
-const connect_database = async () => {
-    const conn = await create_connection();
-    await sync_database(conn);
+export {
+    create_connection,
+    sync_database
 }
-
-export {create_connection, connect_database}

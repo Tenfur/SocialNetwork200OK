@@ -1,11 +1,8 @@
 import { DataTypes } from 'sequelize'
-import {create_connection} from '../config/DatabaseConnection.js'
 
-const User = async () => { 
+const User = (conn) => { 
     console.log('ola4')
-    const conn = await create_connection()
-    console.log(create_connection)
-    const schema = conn.define('ArianTests', {
+    return conn.define('ArianTest', {
         nombres: {
             type: DataTypes.STRING,
             allowNull: false
@@ -14,10 +11,9 @@ const User = async () => {
             type: DataTypes.STRING,
             allowNull: false
         }},
-    {
-        schema: 'Test'
-    });
-
-    return schema;
+        {
+            schema: 'Test'
+        }
+    )
 }
 export default User

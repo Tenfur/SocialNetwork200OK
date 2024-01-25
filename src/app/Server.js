@@ -1,6 +1,6 @@
 import express from "express"
-import {connect_database} from "../config/DatabaseConnection.js"
 import UserRoutes from "../routes/UserRoute.js"
+import { create_connection, sync_database } from "../config/DatabaseConnection.js"
 
 class Server{
     constructor() {
@@ -13,11 +13,12 @@ class Server{
     }
     async middlewares(){
         this.app.use(express.json())
-        await connect_database()
+        this.conn = create_connection()
+        sync_database(this.conn)
 
     }
     routes(){
-        this.app.use(new UserRoutes().router)
+        this.app.use(new UserRoutes(this.conn).router)
     }
     listen(){
         this.app.listen(this.PORT, () =>{

@@ -2,7 +2,8 @@ import { Router } from "express"
 import UserService from "../services/UserService.js";
 
 class UserRoutes {
-    constructor() {
+    constructor(conn) {
+        this._conn = conn;
         this._router = Router();
         this.initialize_routes();
     }
@@ -19,7 +20,7 @@ class UserRoutes {
         try {
             console.log('ola')
             const {nombres, apellidos} = req.body;
-            const user = await new UserService().create_user({nombres, apellidos});
+            const user = await new UserService(this._conn).create_user({nombres, apellidos});
             return res.json(user)
         }catch (e){
             res.status(500).send(`Error to create user: ${e}`);

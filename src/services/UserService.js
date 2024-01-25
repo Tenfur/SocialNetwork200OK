@@ -1,12 +1,13 @@
 import UserRepository from "../repositories/UserRepository.js"
 
 class UserService {
-    constructor() {
+    constructor(conn) {
+        this._conn = conn;
     }
 
     async create_user(user) {
         console.log('ola2')
-        return await new UserRepository().create_user(user)
+        return await new UserRepository(this._conn).create_user(user)
         
     }
 }
